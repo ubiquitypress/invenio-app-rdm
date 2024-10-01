@@ -6,6 +6,6 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Invenio administration module for user resources."""
-from .users import UsersDetailView, UsersListView
+from .users import UsersCreateView, UsersDetailView, UsersListView
 
-__all__ = ("UsersDetailView", "UsersListView")
+__all__ = ("UsersCreateView", "UsersDetailView", "UsersListView")
