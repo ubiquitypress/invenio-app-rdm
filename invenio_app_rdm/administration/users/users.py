@@ -144,8 +144,8 @@ class UsersDetailView(AdminResourceDetailView):
 class UsersCreateView(AdminResourceCreateView):
     """Configuration for user create view."""
 
-    url = "/users/create-via-admin"
-    api_endpoint = "/users/create-via-admin"
+    url = "/users/create"
+    api_endpoint = "/users"
     extension_name = "invenio-users-resources"
     name = "invenio-users-resources-create"
     resource_config = "users_resource"
