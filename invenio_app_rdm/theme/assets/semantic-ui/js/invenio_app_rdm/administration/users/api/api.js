@@ -32,6 +32,22 @@ const impersonateUser = async (user) => {
   return await http.post(APIRoutes.impersonate(user));
 };
 
+const addGroupToUser = async (user, group) => {
+  return await http.put(APIRoutes.addgroup(user, group));
+};
+
+const removeGroupFromUser = async (user, group) => {
+  return await http.delete(APIRoutes.removegroup(user, group));
+};
+
+const userGroups = async (user) => {
+  return await http.get(APIRoutes.usergroups(user));
+};
+
+const groups = async () => {
+  return await http.get(APIRoutes.groups());
+};
+
 export const UserModerationApi = {
   restoreUser: restoreUser,
   approveUser: approveUser,
@@ -39,4 +55,8 @@ export const UserModerationApi = {
   impersonateUser: impersonateUser,
   deactivateUser: deactivateUser,
   blockUser: blockUser,
+  addGroupToUser: addGroupToUser,
+  removeGroupFromUser: removeGroupFromUser,
+  userGroups: userGroups,
+  groups: groups
 };

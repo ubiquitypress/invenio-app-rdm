@@ -33,8 +33,7 @@ export class ManageUserGroups extends Component {
       modalHeader: i18next.t("Manage user groups"),
       modalBody: (
         <ManageUserGroupsForm
-          actionSuccessCallback={this.handleSuccess}
-          actionCancelCallback={this.closeModal}
+          actionCloseCallback={this.closeModal}
           user={user}
         />
       ),
@@ -73,7 +72,7 @@ export class ManageUserGroups extends Component {
           labelPosition="left"
         >
           <Icon name="spy" />
-          Add Group
+          Manage Groups
         </Dropdown.Item>
         <ActionModal modalOpen={modalOpen} user={user}>
           {modalHeader && <Modal.Header>{modalHeader}</Modal.Header>}
@@ -86,7 +85,6 @@ export class ManageUserGroups extends Component {
 
 ManageUserGroups.propTypes = {
   user: PropTypes.object.isRequired,
-  successCallback: PropTypes.func.isRequired,
 };
 
 ManageUserGroups.defaultProps = {};

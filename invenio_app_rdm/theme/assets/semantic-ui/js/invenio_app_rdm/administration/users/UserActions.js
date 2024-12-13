@@ -16,6 +16,7 @@ import { withCancel } from "react-invenio-forms";
 import { i18next } from "@translations/invenio_app_rdm/i18next";
 import { ImpersonateUser } from "../components/ImpersonateUser";
 import { SetQuotaAction } from "../components/SetQuotaAction";
+import { ManageUserGroups } from "../components/ManageUserGroups";
 import { UserModerationApi } from "./api";
 
 export class UserActions extends Component {
@@ -106,6 +107,7 @@ export class UserActions extends Component {
       displayApprove,
       displayRestore,
       successCallback,
+      displayManageGroups,
       displayImpersonateUser,
       displayQuota,
       useDropdown,
@@ -154,6 +156,11 @@ export class UserActions extends Component {
                 successCallback();
                 setTimeout(() => (window.location = "/"), 1000);
               }}
+              user={user}
+            />
+          )}
+          {displayManageGroups && (
+            <ManageUserGroups
               user={user}
             />
           )}
@@ -247,6 +254,7 @@ UserActions.propTypes = {
   displaySuspend: PropTypes.bool,
   displayApprove: PropTypes.bool,
   displayRestore: PropTypes.bool,
+  displayManageGroups: PropTypes.bool,
   displayImpersonateUser: PropTypes.bool,
   displayQuota: PropTypes.bool,
   useDropdown: PropTypes.bool,
@@ -257,6 +265,7 @@ UserActions.defaultProps = {
   displaySuspend: false,
   displayApprove: false,
   displayRestore: false,
+  displayManageGroups: false,
   displayImpersonateUser: false,
   displayQuota: false,
   useDropdown: false,
