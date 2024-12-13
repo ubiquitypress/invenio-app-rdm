@@ -171,6 +171,7 @@ class SearchResultItemComponent extends Component {
             useDropdown
             user={result}
             successCallback={this.refreshAfterAction}
+            displayManageGroups
             displayImpersonateUser
             displayQuota
           />
