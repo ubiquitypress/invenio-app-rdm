@@ -32,6 +32,22 @@ const APIRoutesGenerators = {
   impersonate: (user, idKeyPath = "id") => {
     return `/api/users/${_get(user, idKeyPath)}/impersonate`;
   },
+
+  addgroup: (user, group, idKeyPath = "id") => {
+    return `/api/users/${_get(user, idKeyPath)}/groups/${group}`;
+  },
+  
+  removegroup: (user, group, idKeyPath = "id") => {
+    return `/api/users/${_get(user, idKeyPath)}/groups/${group}`;
+  },
+
+  usergroups: (user, idKeyPath = "id") => {
+    return `/api/users/${_get(user, idKeyPath)}/groups`;
+  },
+
+  groups: () => {
+    return `/api/groups`;
+  },
 };
 export const APIRoutes = {
   ...APIRoutesGenerators,
