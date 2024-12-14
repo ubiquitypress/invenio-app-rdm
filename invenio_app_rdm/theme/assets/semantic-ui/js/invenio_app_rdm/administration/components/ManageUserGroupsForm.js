@@ -28,7 +28,8 @@ export class ManageUserGroupsForm extends Component {
       userRoles: [],
     };
     this.confirmSchema = Yup.object({
-      selectedOption: Yup.string()
+      selectedOption: Yup.array()
+        .of(Yup.string())
         .required('This field is required'),
     });
   }
@@ -80,52 +81,48 @@ export class ManageUserGroupsForm extends Component {
 
       static contextType = NotificationContext;
 
-      handleSubmit = async (values) => {
+  handleSubmit = async (values) => {
     this.setState({ loading: true });
     const { addNotification } = this.context;
     const { user, actionCloseCallback } = this.props;
-    console.log(values.selectedOption)
-    const [action, group] = values.selectedOption.split(':');
-    const apiMethod = action === 'add' ? UserModerationApi.addGroupToUser : UserModerationApi.removeGroupFromUser;
-    this.cancellableAction = withCancel(apiMethod(user, group));
-    try {
-      await this.cancellableAction.promise;
-      this.setState({ loading: false, error: undefined });
-      const successMessage = action === 'add' 
-        ? i18next.t("Added group to user successfully!") 
-        : i18next.t("Removed group from user successfully!");
-      addNotification({
-        title: i18next.t("Success"),
-        content: i18next.t(
-          successMessage,
-          {
-            id: user.id,
-          }
-        ),
-        type: "success",
-      });
-      actionCloseCallback();
-    } catch (error) {
-      if (error === "UNMOUNTED") return;
+    for (const option of values.selectedOption) {
+      const [action, group] = option.split(':');
+      const apiMethod = action === 'add' ? UserModerationApi.addGroupToUser : UserModerationApi.removeGroupFromUser;
+      this.cancellableAction = withCancel(apiMethod(user, group));
+      try {
+        await this.cancellableAction.promise;
+        const successMessage = action === 'add' 
+          ? i18next.t("Added group to user successfully!") 
+          : i18next.t("Removed group from user successfully!");
+        addNotification({
+          title: i18next.t("Success"),
+          content: i18next.t(
+            successMessage,
+            {
+              id: user.id,
+            }
+          ),
+          type: "success",
+        });
+      } catch (error) {
+        if (error === "UNMOUNTED") return;
 
-      this.setState({
-        error: error?.response?.data?.message || error?.message,
-        loading: false,
-      });
-      console.error(error);
-    }
-  };
-
-
-  handleOnChange = ({ data, formikProps }) => {
-    formikProps.form.setFieldValue("selectedOption", data.value);
+        this.setState({
+          error: error?.response?.data?.message || error?.message,
+          loading: false,
+        });
+        console.error(error);
+        break;
+      }
+    };
+    this.setState({ loading: false, error: undefined });
+    actionCloseCallback();
   };
 
   handleModalClose = () => {
     const { actionCloseCallback } = this.props;
     actionCloseCallback();
   };
-
 
   initFormValues = () => {
     return {
@@ -144,7 +141,7 @@ export class ManageUserGroupsForm extends Component {
         validateOnBlur={false}
         validationSchema={() => this.confirmSchema}
       >
-      {({ values, handleSubmit }) => {
+      {({ handleSubmit }) => {
             return (
             <>
               {error && (
@@ -167,17 +164,12 @@ export class ManageUserGroupsForm extends Component {
                 </p>
               </Message>
               <Form>
+
                 <Form.Field id="selectedOption">
                   <SelectField
-                  label="Choose a group:"
+                  multiple={true}
                   fieldPath="selectedOption"
                   options={dropdownOptions}
-                  onChange={this.handleOnChange}
-                  />
-                  <ErrorLabel
-                  role="alert"
-                  fieldPath="selectedOption"
-                  className="mt-0 mb-5"
                   />
                 </Form.Field>
               </Form>
@@ -217,7 +209,7 @@ export class ManageUserGroupsForm extends Component {
       </Formik>
     );
   }
-}
+};
 
 ManageUserGroupsForm.propTypes = {
   user: PropTypes.object.isRequired,
