@@ -19,15 +19,14 @@ import * as Yup from "yup";
 import { UserModerationApi } from "../users/api";
 import { GroupModerationApi } from "../groups/api";
 
-
-export class ManageUserGroupsForm extends Component {
+export class ManageGroupUsersForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
       error: undefined,
       dropdownOptions: [],
-      userRoles: [],
+      groupUsersRoles: [],
     };
     this.confirmSchema = Yup.object({
       selectedOption: Yup.array()
@@ -42,30 +41,29 @@ export class ManageUserGroupsForm extends Component {
   }
 
 
-  getOptions = async (user_response, group_response) => {
-    const userGroupIds = user_response.hits.hits.map((item) => item.id);
-    return group_response.hits.hits.map((item, index) => ({
+  getOptions = async (group_users_response, user_response) => {
+    const groupUserIds = group_users_response.hits.hits.map((item) => String(item.id));
+    return user_response.hits.hits.map((item, index) => ({
       key: index,
-      text: userGroupIds.includes(item.id) 
-      ? `Remove '${item.name}'` 
-      : `Add '${item.name}'`,
-      value: userGroupIds.includes(item.id) 
-      ? `remove:${item.name}` 
-      : `add:${item.name}`,
+      text: groupUserIds.includes(item.id) 
+      ? `Remove '${item.username}'` 
+      : `Add '${item.username}'`,
+      value: groupUserIds.includes(item.id) 
+      ? `remove:${item.id}` 
+      : `add:${item.id}`,
     }));
   };
 
   // Fetch dropdown options from API
   fetchDropdownOptions = async () => {
-    const { user } = this.props;
+    const { group } = this.props;
     try {
-      const userResponse =  await UserModerationApi.userGroups(user) // Replace with your API URL
-      const response =  await GroupModerationApi.groups() // Replace with your API URL
+      const groupUsersResponse =  await GroupModerationApi.groupUsers(group) // Replace with your API URL
+      const response =  await UserModerationApi.users() // Replace with your API URL
       this.setState({
-        dropdownOptions: await this.getOptions(userResponse.data, response.data),
-        userRoles: userResponse.data.hits.hits.map(item => ({
-          name: item.name,
-          description: item.description
+        dropdownOptions: await this.getOptions(groupUsersResponse.data, response.data),
+        groupUsersRoles: groupUsersResponse.data.hits.hits.map(item => ({
+          username: item.username
         })),
         loading: false,
       });
@@ -86,22 +84,22 @@ export class ManageUserGroupsForm extends Component {
   handleSubmit = async (values) => {
     this.setState({ loading: true });
     const { addNotification } = this.context;
-    const { user, actionCloseCallback } = this.props;
+    const { group, actionCloseCallback } = this.props;
     for (const option of values.selectedOption) {
-      const [action, group] = option.split(':');
-      const apiMethod = action === 'add' ? UserModerationApi.addGroupToUser : UserModerationApi.removeGroupFromUser;
-      this.cancellableAction = withCancel(apiMethod(user, group));
+      const [action, user_id] = option.split(':');
+      const apiMethod = action === 'add' ? GroupModerationApi.addUserToGroup : GroupModerationApi.removeUserFromGroup;
+      this.cancellableAction = withCancel(apiMethod(group, user_id));
       try {
         await this.cancellableAction.promise;
         const successMessage = action === 'add' 
-          ? i18next.t("Added group '{{group}}' to user successfully!", { group }) 
-          : i18next.t("Removed group '{{group}}' from user successfully!", { group });
+          ? i18next.t("Added user {{user_id}} to group successfully!", { user_id }) 
+          : i18next.t("Removed user {{user_id}} from group successfully!", { user_id });
         addNotification({
           title: i18next.t("Success"),
           content: i18next.t(
             successMessage,
             {
-              id: user.id,
+              id: group.id,
             }
           ),
           type: "success",
@@ -133,7 +131,7 @@ export class ManageUserGroupsForm extends Component {
   };
 
   render() {
-    const { userRoles, dropdownOptions, error, loading } = this.state;
+    const {groupUsersRoles, dropdownOptions, error, loading } = this.state;
     return (
       <Formik
         onSubmit={this.handleSubmit}
@@ -176,16 +174,16 @@ export class ManageUserGroupsForm extends Component {
                 </Form.Field>
               </Form>
               <Message visible>
-                <h4>{i18next.t("Current User Roles")}</h4>
+                <h4>{i18next.t("Current Group Users")}</h4>
                 <ul>
-                {userRoles.length > 0 ? (
-                  userRoles.map((role, index) => (
+                {groupUsersRoles.length > 0 ? (
+                  groupUsersRoles.map((role, index) => (
                   <li key={index}>
-                    <strong>{role.name}</strong>: {role.description}
+                    <strong>{role.username}</strong>
                   </li>
                   ))
                 ) : (
-                  <li>{i18next.t("Not assigned to any groups yet.")}</li>
+                  <li>{i18next.t("Not assigned to any users yet.")}</li>
                 )}
                 </ul>
               </Message>
@@ -213,7 +211,7 @@ export class ManageUserGroupsForm extends Component {
   }
 };
 
-ManageUserGroupsForm.propTypes = {
-  user: PropTypes.object.isRequired,
+ManageGroupUsersForm.propTypes = {
+  group: PropTypes.object.isRequired,
   actionCloseCallback: PropTypes.func.isRequired,
 };
