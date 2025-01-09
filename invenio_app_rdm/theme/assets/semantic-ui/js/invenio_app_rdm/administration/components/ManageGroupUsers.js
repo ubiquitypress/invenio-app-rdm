@@ -85,6 +85,7 @@ export class ManageGroupUsers extends Component {
 
 ManageGroupUsers.propTypes = {
   group: PropTypes.object.isRequired,
+  successCallback : PropTypes.func.isRequired,
 };
 
 ManageGroupUsers.defaultProps = {};
