@@ -44,8 +44,8 @@ const userGroups = async (user) => {
   return await http.get(APIRoutes.usergroups(user));
 };
 
-const groups = async () => {
-  return await http.get(APIRoutes.groups());
+const users = async () => {
+  return await http.get(APIRoutes.users());
 };
 
 export const UserModerationApi = {
@@ -58,5 +58,5 @@ export const UserModerationApi = {
   addGroupToUser: addGroupToUser,
   removeGroupFromUser: removeGroupFromUser,
   userGroups: userGroups,
-  groups: groups
+  users: users
 };

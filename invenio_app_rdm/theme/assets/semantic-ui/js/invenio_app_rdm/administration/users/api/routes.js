@@ -45,9 +45,10 @@ const APIRoutesGenerators = {
     return `/api/users/${_get(user, idKeyPath)}/groups`;
   },
 
-  groups: () => {
-    return `/api/groups`;
+  users: () => {
+    return `/api/users`;
   },
+
 };
 export const APIRoutes = {
   ...APIRoutesGenerators,
