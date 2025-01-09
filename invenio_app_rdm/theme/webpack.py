@@ -40,6 +40,7 @@ theme = WebpackThemeBundle(
                 "invenio-domains-administration": "./js/invenio_app_rdm/administration/domains/index.js",
                 "invenio-audit-logs-administration": "./js/invenio_app_rdm/administration/auditLogs/index.js",
                 "invenio-communities-browse": "./js/invenio_app_rdm/subcommunity/browse.js",
+                "invenio-groups-administration": "./js/invenio_app_rdm/administration/groups/index.js",
             },
             dependencies={
                 "@babel/runtime": "^7.9.0",
