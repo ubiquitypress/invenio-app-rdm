@@ -72,7 +72,7 @@ class GroupsListView(AdminResourceListView):
     search_sort_config_name = "USERS_RESOURCES_GROUPS_SORT_OPTIONS"
     search_facets_config_name = "USERS_RESOURCES_GROUPS_SEARCH_FACETS"
     search_request_headers = {"Accept": "application/json"}
-    # template = "invenio_app_rdm/administration/users_search.html"
+    template = "invenio_app_rdm/administration/groups_search.html"
 
     # These actions are not connected on the frontend -
     # TODO: missing permission based links in resource
@@ -82,6 +82,21 @@ class GroupsListView(AdminResourceListView):
     def disabled():
         """Disable the view on demand."""
         return not current_app.config["USERS_RESOURCES_GROUPS_ENABLED"]
+
+    def init_search_config(self):
+        """Build search view config."""
+        return partial(
+            search_app_config,
+            config_name=self.get_search_app_name(),
+            available_facets=current_app.config.get(self.search_facets_config_name),
+            sort_options=current_app.config[self.search_sort_config_name],
+            endpoint=self.get_api_endpoint(),
+            headers=self.get_search_request_headers(),
+            initial_filters=[],
+            hidden_params=[],
+            pagination_options=(20, 50),
+            default_size=20,
+        )
 
 
 class GroupsDetailView(AdminResourceDetailView):
