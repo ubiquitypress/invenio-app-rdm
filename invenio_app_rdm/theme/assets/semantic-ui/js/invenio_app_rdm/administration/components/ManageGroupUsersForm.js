@@ -46,8 +46,8 @@ export class ManageGroupUsersForm extends Component {
     return user_response.hits.hits.map((item, index) => ({
       key: index,
       text: groupUserIds.includes(item.id) 
-      ? `Remove '${item.username}'` 
-      : `Add '${item.username}'`,
+      ? `Remove '${item.email}'` 
+      : `Add '${item.email}'`,
       value: groupUserIds.includes(item.id) 
       ? `remove:${item.id}` 
       : `add:${item.id}`,
@@ -63,7 +63,7 @@ export class ManageGroupUsersForm extends Component {
       this.setState({
         dropdownOptions: await this.getOptions(groupUsersResponse.data, response.data),
         groupUsersRoles: groupUsersResponse.data.hits.hits.map(item => ({
-          username: item.username
+          email: item.email
         })),
         loading: false,
       });
