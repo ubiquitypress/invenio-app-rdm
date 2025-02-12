@@ -60,7 +60,7 @@ class GroupsListView(AdminResourceListView):
     icon = "users" 
 
     display_search = True
-    display_delete = False
+    display_delete = True
     display_edit = True
     display_create = True
     # self.name from create class

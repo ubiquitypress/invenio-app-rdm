@@ -44,27 +44,21 @@ export class UserSearchLayout extends Component {
           {/*<FilterLabels ignoreFilters={["is_open"]} />*/}
         </div>
         <Grid>
+          {/* <Grid.Row> */}
           <Grid.Column
-            computer={4}
-            mobile={16}
-            tablet={16}
-            largeScreen={2}
-            widescreen={2}
+            width={3}
           >
             <SearchFacets aggs={config.aggs} appName={appName} />
           </Grid.Column>
           <Grid.Column
-            mobile={16}
-            tablet={16}
-            computer={12}
-            largeScreen={14}
-            widescreen={14}
+            width={13}
           >
             <SearchAppResultsPane
               layoutOptions={config.layoutOptions}
               appName={appName}
             />
           </Grid.Column>
+          {/* </Grid.Row> */}
         </Grid>
       </>
     );

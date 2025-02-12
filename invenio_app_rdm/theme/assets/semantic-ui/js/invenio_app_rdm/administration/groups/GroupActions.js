@@ -11,7 +11,7 @@ import isEmpty from "lodash/isEmpty";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Button, Icon, Dropdown } from "semantic-ui-react";
-import { NotificationContext, Edit } from "@js/invenio_administration";
+import { NotificationContext, Delete, Edit } from "@js/invenio_administration";
 import { withCancel } from "react-invenio-forms";
 import { i18next } from "@translations/invenio_app_rdm/i18next";
 import { ManageGroupUsers } from "../components/ManageGroupUsers";
@@ -30,11 +30,14 @@ export class GroupActions extends Component {
 
   render() {
     const {
+      title,
       group,
       successCallback,
       displayManageGroups,
+      displayDelete,
       displayEdit,
       editUrl,
+      resourceName,
       resource,
       useDropdown,
     } = this.props;
@@ -59,6 +62,14 @@ export class GroupActions extends Component {
         {useDropdown ? (
           <div>
             {displayEdit && <Edit editUrl={editUrl} resource={resource} />}
+            {displayDelete && (
+            <Delete
+              successCallback={successCallback}
+              resource={resource}
+              resourceName={resourceName}
+              title={title}
+            />
+            )}
             <Dropdown
               text={<Icon name="cog" />}
               tooltip={i18next.t("Actions")}
@@ -80,17 +91,21 @@ export class GroupActions extends Component {
 }
 
 GroupActions.propTypes = {
+  title: PropTypes.string.isRequired,
   group: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
   displayManageGroups: PropTypes.bool,
+  displayDelete: PropTypes.bool,
   displayEdit: PropTypes.bool,
   editUrl: PropTypes.string,
+  resourceName: PropTypes.string.isRequired,
   resource: PropTypes.object,
   useDropdown: PropTypes.bool,
 };
 
 GroupActions.defaultProps = {
   displayManageGroups: false,
+  displayDelete: false,
   displayEdit: false,
   useDropdown: false,
 };
