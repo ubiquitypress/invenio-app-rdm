@@ -80,6 +80,7 @@ class SearchResultItemComponent extends Component {
             group={result}
             successCallback={this.refreshAfterAction}
             displayManageGroups
+            displayDelete
             displayEdit
             editUrl={AdminUIRoutes.editView(listUIEndpoint, result, idKeyPath)}
             resource={result}
@@ -91,6 +92,10 @@ class SearchResultItemComponent extends Component {
 }
 
 SearchResultItemComponent.propTypes = {
+  title: PropTypes.string.isRequired,
+  resourceName: PropTypes.string.isRequired,
+  displayDelete: PropTypes.bool,
+  displayEdit: PropTypes.bool,
   result: PropTypes.object.isRequired,
   idKeyPath: PropTypes.string.isRequired,
   updateQueryState: PropTypes.func.isRequired,
