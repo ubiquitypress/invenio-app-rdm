@@ -179,7 +179,7 @@ export class ManageGroupUsersForm extends Component {
                 {groupUsersRoles.length > 0 ? (
                   groupUsersRoles.map((role, index) => (
                   <li key={index}>
-                    <strong>{role.username}</strong>
+                    <strong>{role.email}</strong>
                   </li>
                   ))
                 ) : (

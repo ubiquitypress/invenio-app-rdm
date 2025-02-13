@@ -46,7 +46,7 @@ const APIRoutesGenerators = {
   },
 
   users: () => {
-    return `/api/users`;
+    return `/api/users/all`;
   },
 
 };
