@@ -1,1 +1,0 @@
-/Users/jake/projects/ubiquity/invenio-ubiquity/assets/js/invenio_app_rdm/overridableRegistry/mapping.js
