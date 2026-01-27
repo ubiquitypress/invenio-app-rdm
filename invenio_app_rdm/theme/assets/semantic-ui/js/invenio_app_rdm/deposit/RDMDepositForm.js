@@ -151,6 +151,7 @@ export class RDMDepositForm extends Component {
         {...overridableBlocksCommonProps}
         fileModification={fileModification}
         recordDeletion={recordDeletion}
+        recordSerializer={null}
       >
         <DepositFormApp
           config={this.config}
@@ -159,6 +160,7 @@ export class RDMDepositForm extends Component {
           files={files}
           permissions={permissions}
           errors={record.errors}
+          recordSerializer={null}
         >
           <Overridable
             id="InvenioAppRdm.Deposit.FormFeedback.container"
